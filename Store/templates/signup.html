@@ -1,0 +1,52 @@
+{% extends 'base.html'%}
+
+{% block content%}
+
+<div class = "container">
+    <div class="p-4 m-4">
+        <div class="col-lg-4 mx-auto border rounded p-4">
+        <h3 class = "alert alert-light border rounded">Become a member by filling and submitting the form...</h3>
+            <form action = "/signup" method = "post" class="row g-3"> 
+            {% csrf_token %}
+                
+                {%if error%}
+                <div class = "alert alert-danger" role = "alert">
+                    {{error}}
+                </div>
+                {% endif %}
+                <div class="form-group">
+                  <label for="" >First name</label>
+                  <input type="text" class="form-control form-control-sm" value="{{values.fname}}" name= "firstname" required >
+                </div>
+                
+                <div class="form-group">
+                  <label for="">Last name</label>
+                  <input type="text" class="form-control form-control-sm"  value="{{values.lname}}" name= "lastname" required>
+                </div>
+                <div class="form-group">
+                  <label for="" >Phone Number</label>
+                  <input type="phone2numeric" class="form-control form-control-sm" value="{{values.phone}}" name= "phone" placeholder="+(code) (number)" required>
+                </div>
+                <div class="form-group">
+                  <label for="" >Email</label>
+                  <input type="email" class="form-control form-control-sm" value="{{values.email}}" name= "email" placeholder="example@mail.com" required>
+                </div>  
+                <div class="form-group">
+                  <label for="" >Password</label>
+                  <input type="Password" class="form-control form-control-sm" name= "password" placeholder="*******" required>
+                    
+                    <pre style="font-size:12px"> Password Policy: 
+    - 1 Upper case character
+    - 1 Lower Case character
+    - 1 Numeric character
+    - 1 Special character ($, #, %, @) </pre>
+                </div>
+                <div class="form-group">
+                  <input type="submit" class="btn btn-primary btn-sm" id="" name= "signup" value = "Create Account" required>
+                </div> 
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

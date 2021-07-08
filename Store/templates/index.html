@@ -1,0 +1,95 @@
+{% extends 'base.html' %} {% block content %} {% load cart %}{% load custom_filter %}
+<div class="container-fluid !direction !spacing">
+  <div class="row mx-auto mt-3">
+    <div class="col-lg-3 mx-auto">
+      <div class="list-group mb-3">
+        <a href="/" class="list-group-item list-group-item-action"
+          >All Products</a
+        >
+        {%for category in categories%}
+        <a
+          href="/?category={{category.id}}"
+          class="list-group-item list-group-item-action"
+          >{{category.name}}</a
+        >
+        {%endfor%}
+      </div>
+      <div class="mx-auto" style="height: 520px">
+        <iframe
+          src="https://www.goldpriceindia.com/wmshare-wlifop-002.php"
+          style="height: 100%; width: 100%"
+        ></iframe>
+      </div>
+    </div>
+
+    <!--row mx-auto mt-3 ${1| ,row-cols-2,row-cols-3, auto,justify-content-md-center,|}-->
+    <div id="products" class="col-lg-9">
+      <div class="row mx-auto">
+        {% for product in products %}
+        <div class="card me-2 mb-3" id="{{product.id}}" style="width: 13rem">
+          <img src="{{product.images.url}}" class="card-img-top" alt="..." />
+          <div class="card-body">
+            <div class="card-title" style="height: 80px">{{product.name}}</div>
+            {% load humanize %}
+            <p class="card-text">{{product.price|intcomma|currency}}</p>
+          </div>
+          <!--{{product|is_in_cart:request.session.cart}}
+                        {{product|cart_quantity:request.session.cart}}-->
+          {% if product|is_in_cart:request.session.cart %}
+          <div class="card-footer p-0 ">
+            <div class="row nu-gutters">
+              <form action="/#{{product.id}}" class="col-2 nu-gutters" method="POST">
+                {%csrf_token%}
+                <input
+                  hidden
+                  type="text"
+                  name="product"
+                  value="{{product.id}}"
+                />
+                <input hidden type="text" name="remove" value="True" />
+                <input
+                  type="submit"
+                  value=" - "
+                  class="btn btn-secondary btn-sm btn-block"
+                />
+              </form>
+              <div class="text-center col">
+                {{product|cart_quantity:request.session.cart}} in Cart
+              </div>
+              <form action="/#{{product.id}}" class="col-3" method="POST">
+                {%csrf_token%}
+                <input
+                  hidden
+                  type="text"
+                  name="product"
+                  value="{{product.id}}"
+                />
+                <input
+                  type="submit"
+                  value=" + "
+                  class="btn btn-secondary btn-sm btn-block"
+                />
+              </form>
+            </div>
+          </div>
+          {% else %}
+          <div class="card-footer row p-0">
+            <form action="/#{{product.id}}" method="POST" class="btn-block">
+              {%csrf_token%}
+              <input hidden type="text" name="product" value="{{product.id}}" />
+              <input
+                type="submit"
+                class="btn bt-light btn-sm boarder form-control"
+                value="Add To Cart"
+              />
+            </form>
+          </div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
